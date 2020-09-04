@@ -11,23 +11,23 @@ d3.json("samples.json").then(data => {
     var dropdown = d3.select("#selDataset");
     // append dropdown with ids 
     dropdown.selectAll("select").data(ids).enter().append("option")
-    .html(function (x) {
-        return `<option value= "${x}">${x}</option>`;
-    });
+        .html(function (x) {
+            return `<option value= "${x}">${x}</option>`;
+        });
 });
 
-function init(){
+function init() {
     d3.json("samples.json").then(data => {
-    var val = data.metadata[0].id.toString();
-    buildPlot(val)
-    console.log(`init ${val}`);
-    buildInfo(val)
+        var val = data.metadata[0].id.toString();
+        buildPlot(val)
+        console.log(`init ${val}`);
+        buildInfo(val)
     });
 };
 
-function optionChanged(){
+function optionChanged() {
     var inputEl = d3.select("select");
-    var  val = inputEl.property("value");
+    var val = inputEl.property("value");
     console.log(val);
     buildPlot(val)
 };
@@ -36,13 +36,13 @@ function buildPlot(val) {
     // making sure data is loaded 
     d3.json("samples.json").then(data => {
         // console.log(data);
-        console.log(val)
+        // console.log(val)
 
         /*MAKING HORIZONTAL CHART */
 
         // getting correct sample 
-        var sample = data.samples.find(({id}) => id === val);
-        console.log(sample);
+        var sample = data.samples.find(({ id }) => id === val);
+        // console.log(sample);
 
         // getting sample values and reversing order 
         var sample_values = sample.sample_values;
@@ -106,10 +106,34 @@ function buildPlot(val) {
     });
 };
 
-function buildInfo(val){
+function buildInfo(val) {
     d3.json("samples.json").then(data => {
-        var sample = data.metadata.find(({id}) => id.toString() === val);
+        var sample = data.metadata.find(({ id }) => id.toString() === val);
         console.log(sample);
+
+        // Object.entries(sample).forEach(([k,v])=> console.log(`${k}: ${v}`));
+
+        // d3.select("#sample-metadata").selectAll("li")
+        // .data(sample).enter()
+        // .append("ul")
+        // .html(function(d) {
+        //     Object.entries(sample).forEach(([k,v])=> (`${k}: ${v}`));
+        //     return `<li>${k}: ${v}<\li>`;
+        // });
+
+
+        d3.select("#sample-metadata")
+            .selectAll("li")
+            .data(sample)
+            .enter()
+            .append("ul")
+            .html(function (d) {
+                return `<li>${d.key}:${d.value}</li>`;
+            });
+
+
+
+
     });
 };
 
