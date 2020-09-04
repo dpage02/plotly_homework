@@ -29,7 +29,8 @@ function optionChanged() {
     var inputEl = d3.select("select");
     var val = inputEl.property("value");
     console.log(val);
-    buildPlot(val)
+    buildPlot(val);
+    buildInfo(val);
 };
 
 function buildPlot(val) {
@@ -97,9 +98,8 @@ function buildPlot(val) {
 
         var bubble_data = [bubble_trace];
         var bubble_layout = {
-            showlegend: true,
             height: 800,
-            width: 1000
+            width: 900
         };
 
         Plotly.newPlot("bubble", bubble_data, bubble_layout);
@@ -111,29 +111,13 @@ function buildInfo(val) {
         var sample = data.metadata.find(({ id }) => id.toString() === val);
         console.log(sample);
 
-        // Object.entries(sample).forEach(([k,v])=> console.log(`${k}: ${v}`));
+        var demoInfo = d3.select(".panel-body");
+        demoInfo.text("");
 
-        // d3.select("#sample-metadata").selectAll("li")
-        // .data(sample).enter()
-        // .append("ul")
-        // .html(function(d) {
-        //     Object.entries(sample).forEach(([k,v])=> (`${k}: ${v}`));
-        //     return `<li>${k}: ${v}<\li>`;
-        // });
-
-
-        d3.select("#sample-metadata")
-            .selectAll("li")
-            .data(sample)
-            .enter()
-            .append("ul")
-            .html(function (d) {
-                return `<li>${d.key}:${d.value}</li>`;
-            });
-
-
-
-
+        Object.entries(sample).forEach(([k,v])=> {
+            demoInfo.append("li").text(`${k}: ${v} \n`)
+        });
+        
     });
 };
 
